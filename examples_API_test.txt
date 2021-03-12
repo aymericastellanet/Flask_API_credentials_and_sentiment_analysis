@@ -1,0 +1,94 @@
+1) Environnement minimal :
+
+Pour faire tourner cette API, il faut avoir sur son ordinateur Python3 d'installé,
+ainsi que les librairies numpy, pandas, flask et vaderSentiment (pip3 install nom_librairie)
+
+
+2) Quelques requêtes pour tester l'API :
+
+Les requêtes sont à copier-coller directement dans la barre d'adresse d'un navigateur.
+
+Si l'adresse http://0.0.0.0:5000/ est introuvable par le navigateur, 
+il faut la remplacer par http://localhost:5000/ (j'ai eu ce soucis sur Windows, mais pas sur Linux)
+
+#############
+## /status ##
+
+# Affiche le statut = 1 quand l'API est lancée
+http://0.0.0.0:5000/status
+
+
+##################
+## /permissions ##
+
+# Affiche les droits de Yoshi : (1, 1)
+http://localhost:5000/permissions?username=Yoshi&password=4237
+
+# Affiche les droits de Julian : (0, 1)
+http://0.0.0.0:5000/permissions?username=Julian&password=7520
+
+# Affiche les droits de Justine : (1, 0)
+http://0.0.0.0:5000/permissions?username=Justine&password=9156
+
+# Justine se trompe de mot de passe 
+# => renvoit une erreur 403 "The password does not match the username!"
+http://0.0.0.0:5000/permissions?username=Justine&password=9100
+
+# Anakin essaie de consulter ses droits mais cet utilisateur n'est pas dans la base de données 
+# => renvoit une erreur 404 "Resource not found"
+http://0.0.0.0:5000/permissions?username=Anakin&password=666
+
+
+###################
+## /v1/sentiment ##
+
+# Justine a accès à v1 (1) et recherche sentence=good 
+# (un rechargement de la page F5 change le nombre aléatoire affiché entre -1.00 et +1.00)
+http://0.0.0.0:5000/v1/sentiment?username=Justine&password=9156&sentence=good
+
+# Justine a accès à v1 (1) mais se trompe de mot de passe
+# => renvoit une erreur 403 "The password does not match the username!"
+http://0.0.0.0:5000/v1/sentiment?username=Justine&password=9123&sentence=good
+
+# Julian n'a pas accès à v1 (0) et recherche sentence=sad
+# => renvoit une erreur 403 "You don't have the rights to access!"
+http://0.0.0.0:5000/v1/sentiment?username=Julian&password=7520&sentence=sad
+
+# Julian n'a pas accès à v1 (0) et en plus, il se trompe de mot de passe
+# => renvoit une erreur 403 "You don't have the rights to access!"
+http://0.0.0.0:5000/v1/sentiment?username=Julian&password=7500&sentence=sad
+
+# Anakin essaie de faire une requête sur v1 mais cet utilisateur n'est pas dans la base de données 
+# => renvoit une erreur 404 "Resource not found"
+http://0.0.0.0:5000/v1/sentiment?username=Anakin&password=666&sentence=dark
+
+###################
+## /v2/sentiment ##
+
+# Julian a accès à v2 (1) et recherche sentence=sad
+# affiche le score -0.4767 pour sentence=sad
+http://0.0.0.0:5000/v2/sentiment?username=Julian&password=7520&sentence=sad
+
+# Yoshi a accès à v2 (1) et recherche sentence=great
+# affiche le score +0.6249 pour sentence=great
+http://0.0.0.0:5000/v2/sentiment?username=Yoshi&password=4237&sentence=great
+
+# Yoshi a accès à v2 (1) mais se trompe de mot de passe
+# => renvoit une erreur 403 "The password does not match the username!"
+http://0.0.0.0:5000/v2/sentiment?username=Yoshi&password=4242&sentence=great
+
+# Justine n'a pas accès à v2 (0) et recherche sentence=good
+# => renvoit une erreur 403 "You don't have the rights to access!"
+http://0.0.0.0:5000/v2/sentiment?username=Justine&password=9156&sentence=good
+
+# Justine n'a pas accès à v2 (0) et en plus, elle se trompe de mot de passe
+# => renvoit une erreur 403 "The password does not match the username!"
+http://0.0.0.0:5000/v2/sentiment?username=Justine&password=9123&sentence=good
+
+# Anakin essaie de faire une requête sur v2 mais cet utilisateur n'est pas dans la base de données 
+# => renvoit une erreur 404 "Resource not found"
+http://0.0.0.0:5000/v2/sentiment?username=Anakin&password=666&sentence=dark
+
+
+
+#by Aymeric Castellanet
