@@ -9,7 +9,7 @@ ainsi que les librairies numpy, pandas, flask et vaderSentiment (pip3 install no
 Les requêtes sont à copier-coller directement dans la barre d'adresse d'un navigateur.
 
 Si l'adresse http://0.0.0.0:5000/ est introuvable par le navigateur, 
-il faut la remplacer par http://localhost:5000/ (j'ai eu ce soucis sur Windows, mais pas sur Linux)
+il faut la remplacer par http://localhost:5000/
 
 #############
 ## /status ##
